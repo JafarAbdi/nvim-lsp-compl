@@ -579,6 +579,15 @@ end
 
 local function apply_snippet(item, suffix)
   if item.textEdit then
+    vim.lsp.util.apply_text_edits(
+      { { newText = '', range = item.textEdit.range } },
+      api.nvim_get_current_buf(),
+      'utf-16'
+    )
+    vim.api.nvim_win_set_cursor(0, {
+      item.textEdit.range.start.line + 1,
+      item.textEdit.range.start.character,
+    })
     M.expand_snippet(item.textEdit.newText .. suffix)
   elseif item.insertText then
     M.expand_snippet(item.insertText .. suffix)
